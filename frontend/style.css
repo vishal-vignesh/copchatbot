@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  #chat-container {
+    width: 400px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  #results {
+    border: 1px solid #ccc;
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  #query-input {
+    width: calc(100% - 80px);
+  }
+  
+  #send-btn {
+    width: 70px;
+  }
+  
