@@ -1,0 +1,6 @@
+flask==2.2.3
+cohere==4.3.0
+pinecone
+python-dotenv==1.0.0
+tqdm==4.64.1
+datasets==2.11.0
