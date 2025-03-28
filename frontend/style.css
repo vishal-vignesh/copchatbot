@@ -234,7 +234,6 @@ body {
   padding: 5px;
 }
 
-
 .emergency-numbers {
   margin-top: 20px;
   background-color: #f9f9f9;
@@ -276,4 +275,41 @@ body {
     height: 100vh;
     border-radius: 0;
   }
+}
+.find-stations-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.nearby-stations {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.nearby-stations.hidden {
+  display: none;
+}
+
+.nearby-stations ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.nearby-stations li {
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
