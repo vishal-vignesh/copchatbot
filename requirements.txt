@@ -1,4 +1,5 @@
 flask==2.2.3
+flask-cors==4.0.0
 cohere==4.3.0
 pinecone
 python-dotenv==1.0.0
