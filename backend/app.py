@@ -156,7 +156,14 @@ def query():
         emergency_numbers = {
             "100": "📞 **Police** - Dialing **100**. Click <a href='tel:100'>here</a> to call.",
             "police": "📞 **Police** - Dialing **100**. Click <a href='tel:100'>here</a> to call.",
-            # ... (rest of the emergency numbers remain the same)
+            "101": "🔥 **Fire Department** - Dialing **101**. Click <a href='tel:101'>here</a> to call.",
+            "fire": "🔥 **Fire Department** - Dialing **101**. Click <a href='tel:101'>here</a> to call.",
+            "102": "🚑 **Ambulance** - Dialing **102**. Click <a href='tel:102'>here</a> to call.",
+            "ambulance": "🚑 **Ambulance** - Dialing **102**. Click <a href='tel:102'>here</a> to call.",
+            "1091": "👩‍🦰 **Women Helpline** - Dialing **1091**. Click <a href='tel:1091'>here</a> to call.",
+            "women helpline": "👩‍🦰 **Women Helpline** - Dialing **1091**. Click <a href='tel:1091'>here</a> to call.",
+            "112": "🚨 **Integrated Emergency Helpline** - Dialing **112**. Click <a href='tel:112'>here</a> to call.",
+            "emergency": "🚨 **Integrated Emergency Helpline** - Dialing **112**. Click <a href='tel:112'>here</a> to call."
         }
 
         # Check if query matches any emergency keyword
@@ -188,7 +195,7 @@ def query():
                     # Translate predefined response back to selected language if needed
                     if selected_language != 'en':
                         response = GoogleTranslator(source='en', target=selected_language).translate(response)
-                    return jsonify({'answer': response})          
+                    return jsonify({'answer': response})
         # Check if the query is relevant
         if not is_query_relevant(query_text):
             response = "I'm sorry, but your query does not seem relevant to legal matters or police procedures. Please ask about FIR filing, rights, or related topics."

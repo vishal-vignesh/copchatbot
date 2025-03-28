@@ -1,140 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Advanced Legal Assistance Chatbot</title>
-    <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Nt1cjaCAco1td71T_T_cREkKg6v9ybc&libraries=places,geometry&callback=initMap"
-      async
-      defer
-    ></script>
 
-    <script>
-      function initMap() {
-        console.log("Google Maps API Loaded Successfully");
-      }
-    </script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Legal Assistance Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    fetch("/config")
+      .then(response => response.json())
+      .then(config => {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_API_KEY}&libraries=places,geometry&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      })
+      .catch(error => console.error("Error loading API key:", error));
 
-  <body>
-    <div class="chatbot-container">
-      <div class="chatbot-header">
-        <div class="header-info">
-          <div class="avatar">
-            <img src="ai-avatar.png" alt="AI Assistant" />
-            <span class="status online"></span>
-          </div>
-          <div class="header-text">
-            <h1>Legal AI Assistant</h1>
-            <p>Online - Ready to help</p>
-          </div>
-          <div class="header-actions">
-            <label for="language-select">Language:</label>
-            <select id="language-select">
-              <option value="en">English</option>
-              <option value="ta">Tamil</option>
-              <option value="te">Telugu</option>
-              <option value="ml">Malayalam</option>
-              <option value="kn">Kannada</option>
-            </select>
-            <button id="emergency-btn" class="icon-btn">
-              Emergency Numbers
-            </button>
-          </div>
+    function initMap() {
+      console.log("Google Maps API Loaded Successfully");
+    }
+  </script>
+
+
+  <script>
+    function initMap() {
+      console.log("Google Maps API Loaded Successfully");
+    }
+  </script>
+</head>
+
+<body>
+  <div class="chatbot-container">
+    <div class="chatbot-header">
+      <div class="header-info">
+        <div class="avatar">
+          <img src="ai-avatar.png" alt="AI Assistant" />
+          <span class="status online"></span>
         </div>
-      </div>
-
-      <div class="chat-area" id="chat-area">
-        <div id="results" class="results-container">
-          <div class="system-message welcome">
-            <p>
-              Welcome to Legal AI Assistant. I'm here to provide professional
-              legal guidance and answer your questions.
-            </p>
-            <br />
-            <p>💡 Examples of questions you can ask:</p>
-            <ul>
-              <li>How do I file an FIR?</li>
-              <li>What are my rights if arrested?</li>
-              <li>What documents are needed to file a complaint?</li>
-            </ul>
-            <span class="timestamp">Just now</span>
-          </div>
+        <div class="header-text">
+          <h1>Legal AI Assistant</h1>
+          <p>Online - Ready to help</p>
         </div>
-      </div>
-
-      <!-- Emergency Numbers Dropdown -->
-      <div id="emergency-numbers" class="emergency-numbers hidden">
-        <h3>Tamil Nadu Emergency Numbers</h3>
-        <ul id="tamil-nadu-list"></ul>
-        <h3>India Emergency Numbers</h3>
-        <ul id="india-list"></ul>
-      </div>
-
-      <div class="input-section">
-        <div class="input-wrapper">
-          <input
-            id="query-input"
-            type="text"
-            placeholder="Type your legal question here..."
-            maxlength="500"
-          />
-          <div class="input-actions">
-            <button class="attach-btn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
-                ></path>
-              </svg>
-            </button>
-            <button id="send-btn" class="send-btn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="input-hints">
-          <span
-            >💡 Tip: Be specific in your legal questions for better
-            assistance.</span
-          >
+        <div class="header-actions">
+          <label for="language-select">Language:</label>
+          <select id="language-select">
+            <option value="en">English</option>
+            <option value="ta">Tamil</option>
+            <option value="te">Telugu</option>
+            <option value="ml">Malayalam</option>
+            <option value="kn">Kannada</option>
+          </select>
+          <button id="emergency-btn" class="icon-btn">
+            Emergency Numbers
+          </button>
         </div>
       </div>
     </div>
-    <button id="find-police-stations-btn" class="find-stations-btn">
-      🚨 Find Nearby Police Stations
-    </button>
 
-    <!-- Add a container to display police stations -->
+    <div class="chat-area" id="chat-area">
+      <div id="results" class="results-container">
+        <div class="system-message welcome">
+          <p>
+            Welcome to Legal AI Assistant. I'm here to provide professional
+            legal guidance and answer your questions.
+          </p>
+          <br />
+          <p>💡 Examples of questions you can ask:</p>
+          <ul>
+            <li>How do I file an FIR?</li>
+            <li>What are my rights if arrested?</li>
+            <li>What documents are needed to file a complaint?</li>
+          </ul>
+          <span class="timestamp">Just now</span>
+        </div>
+      </div>
+    </div>
 
-    <script src="script.js"></script>
-  </body>
+    <!-- Emergency Numbers Dropdown -->
+    <div id="emergency-numbers" class="emergency-numbers hidden">
+      <h3>Tamil Nadu Emergency Numbers</h3>
+      <ul id="tamil-nadu-list"></ul>
+      <h3>India Emergency Numbers</h3>
+      <ul id="india-list"></ul>
+    </div>
+
+    <div class="input-section">
+      <div class="input-wrapper">
+        <input id="query-input" type="text" placeholder="Type your legal question here..." maxlength="500" />
+        <div class="input-actions">
+          <button class="attach-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+              </path>
+            </svg>
+          </button>
+          <button id="send-btn" class="send-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="input-hints">
+        <span>💡 Tip: Be specific in your legal questions for better
+          assistance.</span>
+      </div>
+    </div>
+  </div>
+  <button id="find-police-stations-btn" class="find-stations-btn">
+    🚨 Find Nearby Police Stations
+  </button>
+
+  <!-- Add a container to display police stations -->
+
+  <script src="script.js"></script>
+</body>
+
 </html>
