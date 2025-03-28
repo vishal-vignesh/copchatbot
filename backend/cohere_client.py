@@ -97,7 +97,7 @@ def is_query_relevant(query):
     "wildlife protection", "forest conservation", "climate change", "pollution control", 
     "employment rights", "labor laws", "minimum wage", "trade unions", "industrial disputes", 
     "child labor", "bonded labor", "human trafficking", "women’s rights", "dowry prohibition", 
-    "marriage laws", "divorce laws", "inheritance laws", "property rights", "intellectual property",
+    "marriage laws", "divorce laws", "inheritance laws", "property rights", "intellectual property", "sexual harassment"
     
     # Indian Penal Code (IPC) & Criminal Procedure Code (CrPC) Keywords
     "IPC", "CrPC", "sections", "article", "penal code", "penalty", "punishment", "bailable", 

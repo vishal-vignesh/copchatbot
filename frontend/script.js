@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tamilNaduList = document.getElementById("tamil-nadu-list");
     const indiaList = document.getElementById("india-list");
     const languageSelector = document.getElementById("language-select");
-  
+    const loadingOverlay = document.getElementById("loading-overlay");
     // Emergency numbers data
     const tamilNaduNumbers = [
       { name: "Police", number: "100 or 112" },
@@ -40,7 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
       { name: "Railway Accident Emergency Services", number: "1072" },
       { name: "Road Accident Emergency Services", number: "1073 or 1033" },
     ];
+    // Function to show loading overlay
+    function showInlineLoading() {
+      const inlineLoading = document.getElementById("inline-loading");
+      inlineLoading.classList.remove("hidden");
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.appendChild(inlineLoading);
+    }
   
+    // Function to hide inline loading
+    function hideInlineLoading() {
+      const inlineLoading = document.getElementById("inline-loading");
+      inlineLoading.classList.add("hidden");
+    }
     // Function to populate emergency numbers list
     function populateList(listElement, data) {
       listElement.innerHTML = data
@@ -77,7 +89,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
       return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     };
-  
+    // Function to add system messages
+    const addSystemMessage = (message) => {
+      const messageElement = document.createElement("div");
+      messageElement.classList.add("system-message");
+      messageElement.innerHTML = `
+        <p>${message}</p>
+        <span class="timestamp">${formatTime()}</span>
+      `;
+      resultsDiv.appendChild(messageElement);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    };
     // Function to add user message
     const addUserMessage = (message) => {
       const messageElement = document.createElement("div");
@@ -160,25 +182,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const queryText = queryInput.value.trim();
   
       if (!queryText) {
-        resultsDiv.innerHTML += `
-                  <div class="system-message" style="background-color: #ffebee;">
-                      <p>⚠️ Please enter a valid query.</p>
-                      <span class="timestamp">${formatTime()}</span>
-                  </div>
-              `;
+        addSystemMessage("⚠️ Please enter a valid query.");
         return;
       }
       // Add user message
       addUserMessage(queryText);
       queryInput.value = "";
+  
+      // Show inline loading
+      showInlineLoading();
+  
       try {
-        // Simulating API call with fetch
         const response = await fetch("http://127.0.0.1:5000/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: queryText }),
         });
-  
         const data = await response.json();
   
         // Log contexts for debugging
@@ -188,12 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
         addAIMessage(data.answer);
       } catch (error) {
         console.error("Error:", error);
-        resultsDiv.innerHTML += `
-                  <div class="system-message" style="background-color: #ffebee;">
-                      <p>🤖 Sorry, something went wrong. Please try again.</p>
-                      <span class="timestamp">${formatTime()}</span>
-                  </div>
-              `;
+        addSystemMessage("🤖 Sorry, something went wrong. Please try again.");
+      } finally {
+        // Hide inline loading
+        hideInlineLoading();
       }
     };
   
@@ -231,20 +248,17 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   
-    // Updated function to search for nearby police stations
+    // Modified searchNearbyPoliceStations to use inline loading
     async function searchNearbyPoliceStations() {
       try {
-        // Add a user message indicating they're searching for police stations
         addUserMessage("Find nearby police stations");
   
-        // Show a loading message
-        addAIMessage("Finding nearby police stations...");
+        // Show inline loading
+        showInlineLoading();
   
-        // Get current location
         const location = await getCurrentLocation();
         console.log("Current Location:", location);
   
-        // Send location to backend for processing
         const response = await fetch(
           "http://127.0.0.1:5000/nearby-police-stations",
           {
@@ -268,6 +282,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Error searching nearby police stations:", error);
         addAIMessage(`Error finding police stations: ${error.message}`);
+      } finally {
+        // Hide inline loading
+        hideInlineLoading();
       }
     }
   
