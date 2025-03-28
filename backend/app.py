@@ -5,7 +5,9 @@ from cohere_client import generate_embedding, generate_final_answer, is_query_re
 from deep_translator import GoogleTranslator
 import random
 import requests
+import os
 from math import radians, sin, cos, sqrt, atan2
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
@@ -13,6 +15,8 @@ CORS(app)
 # Initialize Pinecone index
 index = get_pinecone_index()
 
+# Set up Google Translate API key
+GOOGLE_API_KEY= os.getenv("GOOGLE_API_KEY")
 
 # Global variable to store selected language and chat history
 selected_language = "en"
@@ -253,6 +257,11 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     radius = 6371  # Radius of earth in kilometers
 
     return radius * c
+
+@app.route("/config")
+def get_config():
+    return jsonify({"GOOGLE_API_KEY": os.getenv("GOOGLE_API_KEY")})
+
 @app.route('/nearby-police-stations', methods=['POST'])
 def find_nearby_police_stations():
     try:
@@ -269,7 +278,7 @@ def find_nearby_police_stations():
             'location': f"{latitude},{longitude}",
             'radius': 10000,  # 5 km radius
             'type': 'police',
-            'key': 'AIzaSyB8Nt1cjaCAco1td71T_T_cREkKg6v9ybc'
+            'key': GOOGLE_API_KEY
         }
 
         # Make request to Google Places API
