@@ -5,9 +5,7 @@ from cohere_client import generate_embedding, generate_final_answer, is_query_re
 from deep_translator import GoogleTranslator
 import random
 import requests
-import os
 from math import radians, sin, cos, sqrt, atan2
-
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
@@ -15,8 +13,6 @@ CORS(app)
 # Initialize Pinecone index
 index = get_pinecone_index()
 
-# Set up Google Translate API key
-GOOGLE_API_KEY= os.getenv("GOOGLE_API_KEY")
 
 # Global variable to store selected language and chat history
 selected_language = "en"
@@ -65,7 +61,7 @@ intents = [
         )
     ]
     },
-    {
+      {
         "tag": "nearby_police_stations",
         "patterns": [
             "police station near me", 
@@ -112,6 +108,22 @@ intents = [
             "To find nearby police stations, please click the 'Find Nearby Police Stations' button in the interface.",
             "Use the geolocation feature to locate the nearest police stations by clicking the designated button.",
             "The app can help you find police stations close to your current location. Please use the 'Find Nearby Police Stations' button."
+        ]
+    }, {
+        "tag": "nearby_hospitals",
+        "patterns": [
+            "hospital near me", 
+            "nearby hospitals", 
+            "closest hospital", 
+            "find hospitals", 
+            "locate hospital", 
+            "medical facilities", 
+            "healthcare facilities"
+        ],
+        "responses": [
+            "To find nearby hospitals, please click the 'Find Nearby Hospitals' button in the interface.",
+            "Use the geolocation feature to locate the nearest hospitals by clicking the designated button.",
+            "The app can help you find hospitals close to your current location. Please use the 'Find Nearby Hospitals' button."
         ]
     }
 ]
@@ -165,7 +177,6 @@ def query():
             "112": "🚨 **Integrated Emergency Helpline** - Dialing **112**. Click <a href='tel:112'>here</a> to call.",
             "emergency": "🚨 **Integrated Emergency Helpline** - Dialing **112**. Click <a href='tel:112'>here</a> to call."
         }
-
         # Check if query matches any emergency keyword
         if query_text in emergency_numbers:
             # Translate emergency response back to selected language if needed
@@ -182,20 +193,27 @@ def query():
             for intent_data in intents:
                 if intent_data["tag"] == intent:
                     # Special handling for nearby police stations intent
-                    if intent == "nearby_police_stations":
+                   if intent == "nearby_police_stations":
                         response = (
                             "To find nearby police stations:\n"
                             "1. Click the 'Find Nearby Police Stations' button\n"
                             "2. Allow location access\n"
                             "3. The app will list nearby police stations with their names, addresses, and distances"
                         )
-                    else:
+                   elif intent == "nearby_hospitals":
+                        response = (
+                            "To find nearby hospitals:\n"
+                            "1. Click the 'Find Nearby Hospitals' button\n"
+                            "2. Allow location access\n"
+                            "3. The app will list nearby hospitals with their names, addresses, and distances"
+                        )
+                   else:
                         response = random.choice(intent_data["responses"])
                     
                     # Translate predefined response back to selected language if needed
-                    if selected_language != 'en':
+                if selected_language != 'en':
                         response = GoogleTranslator(source='en', target=selected_language).translate(response)
-                    return jsonify({'answer': response})
+                return jsonify({'answer': response})          
         # Check if the query is relevant
         if not is_query_relevant(query_text):
             response = "I'm sorry, but your query does not seem relevant to legal matters or police procedures. Please ask about FIR filing, rights, or related topics."
@@ -264,11 +282,6 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     radius = 6371  # Radius of earth in kilometers
 
     return radius * c
-
-@app.route("/config")
-def get_config():
-    return jsonify({"GOOGLE_API_KEY": os.getenv("GOOGLE_API_KEY")})
-
 @app.route('/nearby-police-stations', methods=['POST'])
 def find_nearby_police_stations():
     try:
@@ -285,7 +298,7 @@ def find_nearby_police_stations():
             'location': f"{latitude},{longitude}",
             'radius': 10000,  # 5 km radius
             'type': 'police',
-            'key': GOOGLE_API_KEY
+            'key': 'AIzaSyB8Nt1cjaCAco1td71T_T_cREkKg6v9ybc'
         }
 
         # Make request to Google Places API
@@ -316,8 +329,8 @@ def find_nearby_police_stations():
             for station in nearby_stations[:5]:
                 stations_text += (
                     f"📍 *{station['name']}*\n"
-                    f"Address: {station['vicinity']}\n"
-                    f"Distance: {station['distance']:.2f} km\n\n"
+                    f"-> Address: {station['vicinity']}\n"
+                    f"-> Distance: {station['distance']:.2f} km\n\n"
                 )
             
             return jsonify({'answer': stations_text})
@@ -330,5 +343,68 @@ def find_nearby_police_stations():
             'answer': 'Unable to find nearby police stations. Please try again.'
         }), 500
 
+@app.route('/nearby-hospitals', methods=['POST'])
+def find_nearby_hospitals():
+    try:
+        # Get location from request
+        data = request.json
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+
+        # Google Places API endpoint
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+        
+        # Parameters for the API request
+        params = {
+            'location': f"{latitude},{longitude}",
+            'radius': 10000,  # 10 km radius
+            'type': 'hospital',
+            'key': 'AIzaSyB8Nt1cjaCAco1td71T_T_cREkKg6v9ybc'
+        }
+
+        # Make request to Google Places API
+        response = requests.get(url, params=params)
+        results = response.json().get('results', [])
+
+        # Process and filter hospitals
+        nearby_hospitals = []
+        for hospital in results:
+            # Calculate distance
+            hospital_lat = hospital['geometry']['location']['lat']
+            hospital_lng = hospital['geometry']['location']['lng']
+            distance = haversine_distance(latitude, longitude, hospital_lat, hospital_lng)
+
+            # Add hospital details
+            nearby_hospitals.append({
+                'name': hospital.get('name', 'Hospital'),
+                'vicinity': hospital.get('vicinity', 'Location not available'),
+                'distance': distance,
+                'open_now': hospital.get('opening_hours', {}).get('open_now', 'Unknown')
+            })
+
+        # Sort hospitals by distance
+        nearby_hospitals.sort(key=lambda x: x['distance'])
+
+        # Prepare formatted response for chat
+        if nearby_hospitals:
+            hospitals_text = "🏥 Nearby Hospitals:\n\n"
+            for hospital in nearby_hospitals[:5]:
+                status = "Open" if hospital['open_now'] is True else "Closed/Status Unknown"
+                hospitals_text += (
+                    f"🩺 *{hospital['name']}*\n"
+                    f"-> Address: {hospital['vicinity']}\n"
+                    f"-> Distance: {hospital['distance']:.2f} km\n"
+                    f"-> Status: {status}\n\n"
+                )
+            
+            return jsonify({'answer': hospitals_text})
+        else:
+            return jsonify({'answer': "No hospitals found within 10 km."})
+
+    except Exception as e:
+        print(f"Error finding nearby hospitals: {e}")
+        return jsonify({
+            'answer': 'Unable to find nearby hospitals. Please try again.'
+        }), 500
 if __name__ == '__main__':
     app.run(debug=True)

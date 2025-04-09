@@ -1,139 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COP Chat Bot</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <script>
-    fetch("/config")
-      .then(response => response.json())
-      .then(config => {
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_API_KEY}&libraries=places,geometry&callback=initMap`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-      })
-      .catch(error => console.error("Error loading API key:", error));
-
-    function initMap() {
-      console.log("Google Maps API Loaded Successfully");
-    }
-  </script>
-
-
-  <script>
-    function initMap() {
-      console.log("Google Maps API Loaded Successfully");
-    }
-  </script>
-</head>
-
-<body>
-  <div class="app-container">
-    <div class="chatbot-wrapper">
-      <div class="chatbot-container">
-        <div class="chatbot-header">
-          <div class="header-badge">
-            <i class="fas fa-shield-alt header-icon"></i>
-            <span class="header-title">COP Chat Bot</span>
-          </div>
-          <div class="header-actions">
-            <!-- Inside the header actions, replace the language selector with this -->
-            <div class="language-selector-container">
-              <div class="language-selector">
-                <i class="fas fa-globe"></i>
-                <select id="language-select" aria-label="Select Language">
-                  <option value="en">English</option>
-                  <option value="ta">Tamil</option>
-                  <option value="te">Telugu</option>
-                  <option value="ml">Malayalam</option>
-                  <option value="kn">Kannada</option>
-                </select>
-              </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Legal Police Assistant</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Nt1cjaCAco1td71T_T_cREkKg6v9ybc&libraries=places,geometry&callback=initMap"
+      async
+      defer
+    ></script>
+    <script>
+      function initMap() {
+        console.log("Google Maps API Loaded Successfully");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="chatbot-wrapper">
+        <div class="chatbot-container">
+          <div class="chatbot-header">
+            <div class="header-badge">
+              <i class="fas fa-shield-alt header-icon"></i>
+              <span class="header-title">Legal Police Assistant</span>
             </div>
-            <button id="emergency-btn" class="action-btn">
-              <i class="fas fa-phone-alt"></i> Emergency
-            </button>
-          </div>
-        </div>
-
-        <div class="chat-area" id="chat-area">
-          <div id="results" class="results-container">
-            <div class="system-message welcome">
-              <div class="welcome-header">
-                <i class="fas fa-info-circle"></i>
-                <h3>Welcome to COP Chat Bot</h3>
+            <div class="header-actions">
+              <!-- Inside the header actions, replace the language selector with this -->
+              <div class="language-selector-container">
+                <div class="language-selector">
+                  <i class="fas fa-globe"></i>
+                  <select id="language-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="ta">Tamil</option>
+                    <option value="te">Telugu</option>
+                    <option value="ml">Malayalam</option>
+                    <option value="kn">Kannada</option>
+                  </select>
+                </div>
               </div>
-              <p>
-                I'm here to provide professional legal guidance and answer
-                your questions.
-              </p>
-              <div class="example-questions">
-                <h4>💡 Example Questions:</h4>
-                <ul>
-                  <li>How do I file an FIR?</li>
-                  <li>What are my rights if arrested?</li>
-                  <li>Police station near me</li>
-                </ul>
+              <button id="emergency-btn" class="action-btn">
+                <i class="fas fa-phone-alt"></i> Emergency
+              </button>
+            </div>
+          </div>
+
+          <div class="chat-area" id="chat-area">
+            <div id="results" class="results-container">
+              <div class="system-message welcome">
+                <div class="welcome-header">
+                  <i class="fas fa-info-circle"></i>
+                  <h3>Welcome to Legal Police Assistant</h3>
+                </div>
+                <p>
+                  I'm here to provide professional legal guidance and answer
+                  your questions.
+                </p>
+                <div class="example-questions">
+                  <h4>💡 Example Questions:</h4>
+                  <ul>
+                    <li>How do I file an FIR?</li>
+                    <li>What are my rights if arrested?</li>
+                    <li>Get nearest Police station List.</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
+
+          <div id="emergency-numbers" class="emergency-dropdown hidden">
+            <div class="emergency-header">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Emergency Helplines</h3>
+            </div>
+            <div class="emergency-content">
+              <div class="emergency-section">
+                <h4>Tamil Nadu Emergency Numbers</h4>
+                <ul id="tamil-nadu-list"></ul>
+              </div>
+              <div class="emergency-section">
+                <h4>National Emergency Numbers</h4>
+                <ul id="india-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-section">
+            <div class="input-wrapper">
+              <div class="input-icons">
+                <i class="fas fa-paperclip attach-icon"></i>
+              </div>
+              <input
+                id="query-input"
+                type="text"
+                placeholder="Type your legal question..."
+                maxlength="500"
+              />
+              <button id="send-btn" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="input-tip">
+              <i class="fas fa-lightbulb"></i>
+              <span>Tip: Be specific in your legal questions</span>
+            </div>
+          </div>
         </div>
 
-        <div id="emergency-numbers" class="emergency-dropdown hidden">
-          <div class="emergency-header">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Emergency Helplines</h3>
-          </div>
-          <div class="emergency-content">
-            <div class="emergency-section">
-              <h4>Tamil Nadu Emergency Numbers</h4>
-              <ul id="tamil-nadu-list"></ul>
-            </div>
-            <div class="emergency-section">
-              <h4>National Emergency Numbers</h4>
-              <ul id="india-list"></ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="input-section">
-          <div class="input-wrapper">
-            <div class="input-icons">
-              <i class="fas fa-paperclip attach-icon"></i>
-            </div>
-            <input id="query-input" type="text" placeholder="Type your legal question..." maxlength="500" />
-            <button id="send-btn" class="send-btn">
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          </div>
-          <div class="input-tip">
-            <i class="fas fa-lightbulb"></i>
-            <span>Tip: Be specific in your legal questions</span>
-          </div>
+        <div class="additional-actions">
+          <button
+            id="find-police-stations-btn"
+            class="action-btn police-stations-btn"
+          >
+            <i class="fas fa-map-marker-alt"></i> Find Nearby Police Stations
+          </button>
+          <button id="find-hospitals-btn" class="action-btn police-stations-btn">
+            <i class="fas fa-hospital"></i> Find Nearby Hospitals
+          </button>
         </div>
       </div>
+    </div>
 
-      <div class="additional-actions">
-        <button id="find-police-stations-btn" class="action-btn police-stations-btn">
-          <i class="fas fa-map-marker-alt"></i> Find Nearby Police Stations
-        </button>
+    <div id="inline-loading" class="inline-loading hidden">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
       </div>
     </div>
-  </div>
 
-  <div id="inline-loading" class="inline-loading hidden">
-    <div class="loading-spinner">
-      <i class="fas fa-spinner fa-spin"></i>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>

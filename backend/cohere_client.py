@@ -70,12 +70,12 @@ def is_query_relevant(query):
     "safety", "security", "privacy", "confidential", "anonymous", "identity", 
     "witness protection", "legal aid", "lawyer", "advocate", "counsel", "advice", 
     "verification", "background check", "NOC", "clearance", "permission", "protest", 
-    "gathering", "event", "procession", "rally", "demonstration", "bns", 
+    "gathering", "event", "procession", "rally", "demonstration", "bns","ambedkar"
 
     # Emergency & Helpline Keywords
     "emergency", "helpline", "contact", "number", "dial", "call", "100", "112", 
     "ambulance", "fire", "accident", "crisis", "urgent", "immediate", "assistance", 
-    "help", "rescue", "support", "danger", "threat",
+    "help", "rescue", "support", "danger", "threat","pls help"
 
     # Indian Constitution & Governance Keywords
     "constitution", "fundamental rights", "directive principles", "democracy", 
@@ -97,7 +97,7 @@ def is_query_relevant(query):
     "wildlife protection", "forest conservation", "climate change", "pollution control", 
     "employment rights", "labor laws", "minimum wage", "trade unions", "industrial disputes", 
     "child labor", "bonded labor", "human trafficking", "women’s rights", "dowry prohibition", 
-    "marriage laws", "divorce laws", "inheritance laws", "property rights", "intellectual property", "sexual harassment"
+    "marriage laws", "divorce laws", "inheritance laws", "rape","violence","crime","theft","property rights","sexual harassment","intellectual property",
     
     # Indian Penal Code (IPC) & Criminal Procedure Code (CrPC) Keywords
     "IPC", "CrPC", "sections", "article", "penal code", "penalty", "punishment", "bailable", 

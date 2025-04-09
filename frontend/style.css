@@ -275,6 +275,7 @@ body {
   padding: 15px;
   background-color: white;
   border-top: 1px solid var(--border-color);
+  gap: 10px;
 }
 
 .police-stations-btn {
